@@ -7,6 +7,7 @@ import time
 import numpy
 
 class TwitterBot:
+    #Initialization goes to Twitter.com and logs in
     def __init__(self, username, password):
         self.driver = webdriver.Chrome()
         self.username = username
@@ -25,7 +26,8 @@ class TwitterBot:
             )
         except:
             self.driver.quit()
-        
+    
+    #Private helper function that gets the list of usernames from a page
     def _getUserList(self, url):
         self.driver.get(url.format(self.username))
         time.sleep(3)
@@ -46,6 +48,7 @@ class TwitterBot:
 
         return users
 
+    #Public function that returns the list of usernames that are in your following list but not following you back
     def getUnfollows(self):
         following = self._getUserList("https://twitter.com/{0}/following")
         followers = self._getUserList("https://twitter.com/{0}/followers")
@@ -53,6 +56,7 @@ class TwitterBot:
 
         return notFollowingBack
 
+    #Public function that likes all the current post under a specific hashtag
     def likePost(self, hashtag):
         searchBox = self.driver.find_element_by_id("SearchBox_Search_Input")
         searchBox.send_keys(hashtag)
